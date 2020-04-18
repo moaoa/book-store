@@ -66,3 +66,27 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+### what to do
+
+[x] setup a basic express server
+[x] create routes allBooks/create/edit/delete/showBook (dummy with basic routing)
+[x] create the book models
+[x] connect to mongo db
+[x] create book component
+[x] create buttons components edit delete create new one
+[x] spesify proxy
+[x] create routing inside react
+[x] create pages new/edit
+[x] add user model
+[x] add slug, price fields to the book document
+[x] add a book
+[x] complete backend
+[x] when creating a new book the show page doesn't load
+[x] when deleting a book the home page doesn't re-render
+[] understand routing
+[] complete routing
+[] add auth
+[] permesion implementation
+[] setup payment
+[] stylig
