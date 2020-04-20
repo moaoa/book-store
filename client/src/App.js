@@ -1,4 +1,10 @@
-import React, { createContext, useState, useEffect, useReducer } from 'react'
+import React, {
+    createContext,
+    useState,
+    useEffect,
+    useReducer,
+    useContext,
+} from 'react'
 import './App.css'
 import Book from './components/Book'
 import Nav from './components/Nav'
@@ -7,16 +13,9 @@ import CreateNewBookPage from './components/CreateNewBookPage'
 import HomePage from './components/HomePage'
 import EditPage from './components/EditPage'
 import { FETCH_SUCCESS, FETCH_FAILED } from './actions/constants'
-import reducer from './reducers/index.js'
-const initialState = {
-    books: [],
-    error: '',
-    loading: true,
-}
-export const BooksContext = React.createContext(initialState)
+import { context } from './stateProvider'
 function App() {
-    const [state, dispatch] = useReducer(reducer, initialState)
-
+    const { state, dispatch } = useContext(context)
     useEffect(() => {
         fetch('/allbooks', {
             headers: {
@@ -32,39 +31,35 @@ function App() {
             })
     }, [])
     return (
-        <BooksContext.Provider value={{ state, dispatch }}>
-            <Router>
-                <div className="App">
-                    <Nav />
+        <div className="App">
+            <Nav />
 
-                    <Switch>
-                        <Route path="/" exact children={<HomePage />} />
-                        <Route
-                            path="/show-book/:slug"
-                            render={(props) => {
-                                const {
-                                    match: {
-                                        params: { slug },
-                                    },
-                                } = props
-                                const book = state.books.find(
-                                    (book) => book.slug === slug
-                                )
-                                return <Book book={book} />
-                            }}
-                        />
-                        <Route
-                            path="/new-book"
-                            render={(props) => <CreateNewBookPage {...props} />}
-                        />
-                        <Route
-                            path="/edit/:slug"
-                            render={(props) => <EditPage {...props} />}
-                        />
-                    </Switch>
-                </div>
-            </Router>
-        </BooksContext.Provider>
+            <Switch>
+                <Route path="/" exact component={HomePage} />
+                <Route
+                    path="/show-book/:slug"
+                    render={(props) => {
+                        const {
+                            match: {
+                                params: { slug },
+                            },
+                        } = props
+                        const book = state.books.find(
+                            (book) => book.slug === slug
+                        )
+                        return <Book book={book} />
+                    }}
+                />
+                <Route
+                    path="/new-book"
+                    render={(props) => <CreateNewBookPage {...props} />}
+                />
+                <Route
+                    path="/edit/:slug"
+                    render={(props) => <EditPage {...props} />}
+                />
+            </Switch>
+        </div>
     )
 }
 

@@ -6,13 +6,15 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node server.js",
-        "dev": "nodemon server.js"
+        "dev": "nodemon server.js",
+        "start-dev": "concurrently \"npm run dev\" \"cd client && npm start \""
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
         "bcrypt": "^4.0.1",
+        "concurrently": "^5.1.0",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "jsonwebtoken": "^8.5.1",

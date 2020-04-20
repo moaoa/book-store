@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useCallback, useContext } from 'react'
-import { BooksContext } from '../App'
-import { DELETE_BOOK } from '../actions/constants'
+import { context } from '../stateProvider'
+import { DELETE_BOOK, FETCH_FAILED } from '../actions/constants'
 
 export default function Book(props) {
     const history = useHistory()
-    const state = useContext(BooksContext)
+    const store = useContext(context)
     let { slug } = props.book
     const sendDeleteReq = useCallback(() => {
         fetch(`/books/${slug}`, {
@@ -15,12 +15,15 @@ export default function Book(props) {
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
-                    // you can redirect then update state
                     history.push('/')
-                    state.dispatch({ type: DELETE_BOOK, payload: { slug } })
+                    store.dispatch({ type: DELETE_BOOK, payload: { slug } })
                 }
             })
-    }, [slug])
+            .catch((e) => {
+                store.dispatch({ type: FETCH_FAILED, bayload: e })
+                console.log(e)
+            })
+    }, [slug, history, store])
 
     return (
         <div className="bookComponent">

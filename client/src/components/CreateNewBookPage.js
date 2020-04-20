@@ -1,9 +1,9 @@
 import React, { useCallback, useContext } from 'react'
-import { BooksContext } from '../App'
+import { context } from '../stateProvider'
 import { ADD_BOOK } from '../actions/constants'
 export default function CreateNewBookPage(props) {
     let titleInput, countInput, dateInput, priceInput
-    const { state, dispatch } = useContext(BooksContext)
+    const { state, dispatch } = useContext(context)
 
     const handleSubmit = useCallback(
         (e) => {
