@@ -32,6 +32,15 @@ const reducer = (state, action) => {
                 ...state,
                 books: modefiedBooks,
             }
+        case DELETE_BOOK:
+            return {
+                ...state,
+                books: state.books.filter(
+                    (book) => book.slug !== action.bayload
+                ),
+            }
+        default:
+            return state
     }
 }
 export default reducer

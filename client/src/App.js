@@ -18,7 +18,7 @@ function App() {
         })
             .then((res) => res.json())
             .then((data) => {
-                dispatch({ type: FETCH_SUCCESS, payload: data.books })
+                dispatch({ type: FETCH_SUCCESS, bayload: data.books })
             })
             .catch((e) => {
                 dispatch({ type: FETCH_FAILED, payload: JSON.stringify(e) })

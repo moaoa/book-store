@@ -1,19 +1,19 @@
 import React from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import { useContext } from 'react'
 import { Context } from '../stateProvider'
 import { DELETE_BOOK, FETCH_FAILED } from '../actions/constants'
 
 export default function Book(props) {
     const history = useHistory()
+    const params = useParams()
 
     const { removeBook, books, dispatch } = useContext(Context)
-    let slug = props?.book?.slug || props.match.params.slug
 
-    console.log('books: ', books)
-    console.log('removeBook: ', removeBook)
-    console.log('dispatch: ', dispatch)
+    let slug = props?.book?.slug || params.slug
+
     const book = books.find((book) => book.slug === slug)
+
     const sendDeleteReq = () => {
         fetch(`/books/${book.slug}`, {
             method: 'DELETE',
@@ -21,13 +21,12 @@ export default function Book(props) {
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
-                    // store.dispatch({ type: DELETE_BOOK, payload: { slug } })
                     removeBook(book.slug)
                     history.push('/')
                 }
             })
             .catch((e) => {
-                // store.dispatch({ type: FETCH_FAILED, bayload: e })
+                dispatch({ type: FETCH_FAILED, bayload: e })
                 console.log(e)
             })
     }
