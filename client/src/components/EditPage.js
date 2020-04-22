@@ -1,22 +1,26 @@
-import React, { useCallback } from 'react'
-import { Redirect, useHistory } from 'react-router-dom'
+import React, { useCallback, useContext, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+import { Context } from '../stateProvider'
+import { EDIT_BOOK, FETCH_FAILED } from '../actions/constants'
 
-export default function EditPage({
-    match: {
-        params: { slug },
-    },
-    setBooks,
-}) {
-    let titleInput, countInput, dateInput, priceInput
+export default function EditPage(props) {
     const history = useHistory()
+    const params = useParams()
+    const { books, dispatch } = useContext(Context)
+
+    const slug = params.slug
+    const selectedBook = books.find((book) => book.slug === slug)
+    const [bookState, setBookState] = useState(selectedBook)
+    const handleOnChange = (key, value) => {
+        console.log(key, ' ', value)
+
+        setBookState({ ...bookState, [key]: value })
+    }
 
     const handleSubmit = useCallback(
         (e) => {
+            console.log(bookState)
             e.preventDefault()
-            console.log(
-                'title property from the client side: ',
-                titleInput.value
-            )
 
             fetch(`/books/${slug}`, {
                 headers: {
@@ -24,24 +28,23 @@ export default function EditPage({
                     accept: 'applicatoin/json',
                 },
                 method: 'PUT',
-                body: JSON.stringify({
-                    title: titleInput.value,
-                    price: priceInput.value,
-                    pageCount: countInput.value,
-                    publishedAt: dateInput.value,
-                }),
+                body: JSON.stringify(bookState),
             })
                 .then((res) => res.json())
                 .then((data) => {
+                    // pass the old slug and the hol new book
+                    console.log('book from backend: ', data.book)
+                    dispatch({
+                        type: EDIT_BOOK,
+                        bayload: { slug, book: data.book },
+                    })
                     history.push(`/show-book/${data.book.slug}`)
-                    setBooks((books) =>
-                        books.map((book) =>
-                            book.slug !== slug ? book : data.book
-                        )
-                    )
+                })
+                .catch((e) => {
+                    dispatch({ type: FETCH_FAILED, bayload: JSON.stringify(e) })
                 })
         },
-        [titleInput, priceInput, countInput, dateInput, slug]
+        [slug, bookState]
     )
 
     return (
@@ -50,34 +53,46 @@ export default function EditPage({
                 <div className="form-group">
                     <label>title</label>
                     <input
-                        ref={(node) => (titleInput = node)}
+                        onChange={(e) =>
+                            handleOnChange(e.target.name, e.target.value)
+                        }
                         type="text"
                         name="title"
+                        defaultValue={selectedBook?.title}
                     />
                 </div>
                 <div className="form-group">
                     <label>page count</label>
                     <input
-                        ref={(node) => (countInput = node)}
                         type="number"
                         name="pageCount"
+                        defaultValue={selectedBook?.pageCount}
+                        onChange={(e) =>
+                            handleOnChange(e.target.name, e.target.value)
+                        }
                     />
                 </div>
                 <div className="form-group">
                     <label>price</label>
                     <input
-                        ref={(node) => (priceInput = node)}
                         type="number"
                         name="price"
+                        defaultValue={selectedBook?.price}
+                        onChange={(e) =>
+                            handleOnChange(e.target.name, e.target.value)
+                        }
                     />
                 </div>
                 <div className="form-group">
                     <label> publishedAt</label>
 
                     <input
-                        ref={(node) => (dateInput = node)}
                         type="date"
                         name="publishedAt"
+                        defaultValue={selectedBook?.publishedAt}
+                        onChange={(e) =>
+                            handleOnChange(e.target.name, e.target.value)
+                        }
                     />
                 </div>
                 <input className="btn btn-primary" type="submit" />

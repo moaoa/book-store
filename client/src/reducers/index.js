@@ -25,12 +25,15 @@ const reducer = (state, action) => {
                 books: [action.payload, ...state.books],
             }
         case EDIT_BOOK:
-            const modefiedBooks = state.books.map((book) =>
-                book.slug !== action.payload ? book : action.payload
-            )
             return {
                 ...state,
-                books: modefiedBooks,
+                books: state.books.map((book) => {
+                    if (book.slug === action.bayload.slug) {
+                        return action.bayload.book
+                    } else {
+                        return book
+                    }
+                }),
             }
         case DELETE_BOOK:
             return {
