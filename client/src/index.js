@@ -1,5 +1,4 @@
 import React from 'react'
-//@ts-check
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'

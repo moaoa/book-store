@@ -1,31 +1,38 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { useCallback, useContext } from 'react'
-import { context } from '../stateProvider'
+import { useContext } from 'react'
+import { Context } from '../stateProvider'
 import { DELETE_BOOK, FETCH_FAILED } from '../actions/constants'
 
 export default function Book(props) {
     const history = useHistory()
-    const store = useContext(context)
-    let { slug } = props.book
-    const sendDeleteReq = useCallback(() => {
-        fetch(`/books/${slug}`, {
+
+    const { removeBook, books, dispatch } = useContext(Context)
+    let slug = props?.book?.slug || props.match.params.slug
+
+    console.log('books: ', books)
+    console.log('removeBook: ', removeBook)
+    console.log('dispatch: ', dispatch)
+    const book = books.find((book) => book.slug === slug)
+    const sendDeleteReq = () => {
+        fetch(`/books/${book.slug}`, {
             method: 'DELETE',
         })
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
+                    // store.dispatch({ type: DELETE_BOOK, payload: { slug } })
+                    removeBook(book.slug)
                     history.push('/')
-                    store.dispatch({ type: DELETE_BOOK, payload: { slug } })
                 }
             })
             .catch((e) => {
-                store.dispatch({ type: FETCH_FAILED, bayload: e })
+                // store.dispatch({ type: FETCH_FAILED, bayload: e })
                 console.log(e)
             })
-    }, [slug, history, store])
+    }
 
-    return (
+    return book ? (
         <div className="bookComponent">
             <div></div>
             <div>title: {props.book.title}</div>
@@ -37,5 +44,7 @@ export default function Book(props) {
                 <button onClick={sendDeleteReq}>Delete</button>
             </div>
         </div>
+    ) : (
+        <div>Error : Book doesn't exist</div>
     )
 }

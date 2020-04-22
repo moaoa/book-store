@@ -1,9 +1,9 @@
 import React, { useCallback, useContext } from 'react'
-import { context } from '../stateProvider'
+import { Context } from '../stateProvider'
 import { ADD_BOOK } from '../actions/constants'
 export default function CreateNewBookPage(props) {
     let titleInput, countInput, dateInput, priceInput
-    const { state, dispatch } = useContext(context)
+    const { dispatch } = useContext(Context)
 
     const handleSubmit = useCallback(
         (e) => {
@@ -43,6 +43,7 @@ export default function CreateNewBookPage(props) {
                         ref={(node) => (titleInput = node)}
                         type="text"
                         name="title"
+                        value="test"
                     />
                 </div>
                 <div className="form-group">
@@ -51,6 +52,7 @@ export default function CreateNewBookPage(props) {
                         ref={(node) => (countInput = node)}
                         type="number"
                         name="pageCount"
+                        value="2"
                     />
                 </div>
                 <div className="form-group">
@@ -59,6 +61,7 @@ export default function CreateNewBookPage(props) {
                         ref={(node) => (priceInput = node)}
                         type="number"
                         name="price"
+                        value="2"
                     />
                 </div>
                 <div className="form-group">

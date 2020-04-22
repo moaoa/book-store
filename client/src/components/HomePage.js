@@ -1,15 +1,18 @@
 import React, { useContext } from 'react'
 import Book from './Book'
-import { context } from '../stateProvider'
+import { Context } from '../stateProvider'
 export default function HomePage() {
-    const { state } = useContext(context)
+    const { books, loading } = useContext(Context)
+    console.log('books: ', books)
+    console.log('loading: ', loading)
+    if (loading) {
+        return <div>loading</div>
+    }
     return (
         <div>
-            {state.loading
-                ? 'loading'
-                : state.books.map((book) => (
-                      <Book key={book.slug} book={book} />
-                  ))}
+            {books.map((book) => (
+                <Book key={book.slug} book={book} />
+            ))}
         </div>
     )
 }

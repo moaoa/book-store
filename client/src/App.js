@@ -1,10 +1,4 @@
-import React, {
-    createContext,
-    useState,
-    useEffect,
-    useReducer,
-    useContext,
-} from 'react'
+import React, { useEffect, useContext } from 'react'
 import './App.css'
 import Book from './components/Book'
 import Nav from './components/Nav'
@@ -13,9 +7,9 @@ import CreateNewBookPage from './components/CreateNewBookPage'
 import HomePage from './components/HomePage'
 import EditPage from './components/EditPage'
 import { FETCH_SUCCESS, FETCH_FAILED } from './actions/constants'
-import { context } from './stateProvider'
+import { Context } from './stateProvider'
 function App() {
-    const { state, dispatch } = useContext(context)
+    const { books, dispatch } = useContext(Context)
     useEffect(() => {
         fetch('/allbooks', {
             headers: {
@@ -44,9 +38,7 @@ function App() {
                                 params: { slug },
                             },
                         } = props
-                        const book = state.books.find(
-                            (book) => book.slug === slug
-                        )
+                        const book = books.find((book) => book.slug === slug)
                         return <Book book={book} />
                     }}
                 />

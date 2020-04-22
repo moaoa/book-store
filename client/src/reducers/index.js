@@ -9,29 +9,27 @@ const reducer = (state, action) => {
     switch (action.type) {
         case FETCH_SUCCESS:
             return {
-                books: action.payload,
+                ...state,
+                books: action.bayload,
                 loading: false,
-                error: '',
             }
         case FETCH_FAILED:
             return {
-                books: [],
+                ...state,
                 loading: false,
                 error: action.payload,
             }
         case ADD_BOOK:
             return {
-                error: '',
-                loading: false,
-                books: [action.payload, state.books],
+                ...state,
+                books: [action.payload, ...state.books],
             }
         case EDIT_BOOK:
             const modefiedBooks = state.books.map((book) =>
                 book.slug !== action.payload ? book : action.payload
             )
             return {
-                loading: false,
-                error: '',
+                ...state,
                 books: modefiedBooks,
             }
     }
