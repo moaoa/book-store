@@ -17,9 +17,14 @@ export default function Book(props) {
     const sendDeleteReq = () => {
         fetch(`/books/${book.slug}`, {
             method: 'DELETE',
+            headers: {
+                auth: localStorage.token,
+            },
         })
             .then((res) => res.json())
             .then((data) => {
+                console.log(data.success)
+
                 if (data.success) {
                     removeBook(book.slug)
                     history.push('/')
@@ -27,20 +32,39 @@ export default function Book(props) {
             })
             .catch((e) => {
                 dispatch({ type: FETCH_FAILED, bayload: e })
-                console.log(e)
+                console.log(e.msg)
             })
     }
 
     return book ? (
-        <div className="bookComponent">
-            <div></div>
-            <div>title: {props.book.title}</div>
-            <div>publidhedAt: {props.book.publishedAt}</div>
-            <div>pageCount: {props.book.pageCount}</div>
-            <div>price: {props.book.price}</div>
-            <div className="book-buttons">
-                <Link to={`/edit/${props.book.slug}`}>Edit</Link>
-                <button onClick={sendDeleteReq}>Delete</button>
+        <div className="bookComponent card ">
+            <div className="card-body">
+                <div className="card-title">title: {props.book.title}</div>
+                <div className="card-subtitle ">
+                    publidhedAt: {props.book.publishedAt.split('T')[0]}
+                </div>
+                <div className="card-text">
+                    pageCount: {props.book.pageCount}
+                </div>
+                <div className="card-text">price: {props.book.price}</div>
+                <div className="book-buttons">
+                    {props.auth && (
+                        <Link
+                            className="btn btn-secondary"
+                            to={`/edit/${props.book.slug}`}
+                        >
+                            Edit
+                        </Link>
+                    )}
+                    {props.auth && (
+                        <button
+                            className="btn btn-danger"
+                            onClick={sendDeleteReq}
+                        >
+                            Delete
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     ) : (

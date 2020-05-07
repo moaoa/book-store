@@ -6,27 +6,35 @@ import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 import CreateNewBookPage from './components/CreateNewBookPage'
 import HomePage from './components/HomePage'
 import EditPage from './components/EditPage'
-import { FETCH_SUCCESS, FETCH_FAILED } from './actions/constants'
+import Login from './components/Login'
+import Dashboard from './components/Dashboard'
+import AllUsers from './components/AllUsers'
+import { FETCH_SUCCESS, FETCH_FAILED, LOGIN } from './actions/constants'
 import { Context } from './stateProvider'
+import CreateNewUserPage from './components/CreateNewUserPage'
 function App() {
-    const { books, dispatch } = useContext(Context)
+    const { books, currentUser, dispatch } = useContext(Context)
     useEffect(() => {
         fetch('/allbooks', {
             headers: {
                 'Content-type': 'application/json',
+                accept: 'application/json',
+                auth: localStorage.getItem('token'),
             },
         })
             .then((res) => res.json())
             .then((data) => {
-                dispatch({ type: FETCH_SUCCESS, bayload: data.books })
+                dispatch({ type: FETCH_SUCCESS, payload: data.books })
+                if (data.user) dispatch({ type: LOGIN, payload: data.user })
             })
             .catch((e) => {
                 dispatch({ type: FETCH_FAILED, payload: JSON.stringify(e) })
             })
     }, [])
     return (
-        <div className="App">
+        <div className="App container">
             <Nav />
+            {currentUser && `hello ${currentUser.name}`}
 
             <Switch>
                 <Route path="/" exact component={HomePage} />
@@ -50,6 +58,10 @@ function App() {
                     path="/edit/:slug"
                     render={(props) => <EditPage {...props} />}
                 />
+                <Route path="/login" component={Login} />
+                <Route path="/register" component={CreateNewUserPage} />
+                <Route path="/myAccount" component={Dashboard} />
+                <Route path="/allUsers" component={AllUsers} />
             </Switch>
         </div>
     )

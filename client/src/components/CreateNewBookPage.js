@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react'
 import { Context } from '../stateProvider'
-import { ADD_BOOK } from '../actions/constants'
+import { ADD_BOOK, FETCH_FAILED } from '../actions/constants'
 export default function CreateNewBookPage(props) {
     let titleInput, countInput, dateInput, priceInput
     const { dispatch } = useContext(Context)
@@ -13,6 +13,7 @@ export default function CreateNewBookPage(props) {
                 headers: {
                     'Content-type': 'application/json',
                     accept: 'application/json',
+                    auth: localStorage.token,
                 },
                 body: JSON.stringify({
                     title: titleInput.value,
@@ -26,7 +27,10 @@ export default function CreateNewBookPage(props) {
                     dispatch({ type: ADD_BOOK, payload: data.book })
                     props.history.push(`/show-book/${data.book.slug}`)
                 })
-                .catch((err) => console.log(err))
+                .catch((err) => {
+                    console.log(err)
+                    dispatch({ type: FETCH_FAILED, payload: err.msg })
+                })
         },
         titleInput,
         countInput,
@@ -43,6 +47,7 @@ export default function CreateNewBookPage(props) {
                         ref={(node) => (titleInput = node)}
                         type="text"
                         name="title"
+                        className="form-control"
                     />
                 </div>
                 <div className="form-group">
@@ -51,6 +56,7 @@ export default function CreateNewBookPage(props) {
                         ref={(node) => (countInput = node)}
                         type="number"
                         name="pageCount"
+                        className="form-control"
                     />
                 </div>
                 <div className="form-group">
@@ -59,6 +65,7 @@ export default function CreateNewBookPage(props) {
                         ref={(node) => (priceInput = node)}
                         type="number"
                         name="price"
+                        className="form-control"
                     />
                 </div>
                 <div className="form-group">
@@ -68,6 +75,7 @@ export default function CreateNewBookPage(props) {
                         ref={(node) => (dateInput = node)}
                         type="date"
                         name="publishedAt"
+                        className="form-control"
                     />
                 </div>
                 <input className="btn btn-primary" type="submit" />

@@ -24,6 +24,11 @@ const bookSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    user: {
+        type: mongoose.SchemaTypes.ObjectId,
+        // type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
 })
 
 bookSchema.pre('validate', function () {
