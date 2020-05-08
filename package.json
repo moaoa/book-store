@@ -11,7 +11,8 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node server.js",
         "dev": "nodemon server.js",
-        "start-dev": "concurrently \"npm run dev\" \"cd client && npm start \""
+        "start-dev": "concurrently \"npm run dev\" \"cd client && npm start \"",
+        "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
     },
     "keywords": [],
     "author": "",

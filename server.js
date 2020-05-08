@@ -11,6 +11,7 @@ const morgan = require('morgan')
 const passport = require('passport')
 const SECRET = process.env.SECRET
 const setUser = require('./middleware/setUser')
+const path = require('path')
 
 // app.use(morgan('tiny'))
 app.use(express.json())
@@ -47,5 +48,13 @@ app.get('/allbooks', setUser, async (req, res) => {
 app.use('/auth', authRoute)
 app.use('/books', setUser, booksRoute)
 app.use('/users', usersRoute)
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'))
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+}
 
 app.listen(port)
