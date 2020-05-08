@@ -49,6 +49,7 @@ router.post('/', async (req, res) => {
         const token = generateToken({ id: user.id })
         res.json({
             user: {
+                _id: user._id,
                 name: user.name,
                 email: user.email,
                 password: user.password,
