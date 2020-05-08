@@ -11,11 +11,21 @@ export default function CreateNewUserPage(props) {
             <form onSubmit={registerUser}>
                 <div className="form-group">
                     <label htmlFor="name">name</label>
-                    <input name="name" id="name" placeholder="Name" />
+                    <input
+                        name="name"
+                        id="name"
+                        placeholder="Name"
+                        className="form-control"
+                    />
                 </div>
                 <div className="form-group">
                     <label htmlFor="email">email</label>
-                    <input name="email" id="email" placeholder="email" />
+                    <input
+                        name="email"
+                        id="email"
+                        placeholder="email"
+                        className="form-control"
+                    />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">password</label>
@@ -23,11 +33,13 @@ export default function CreateNewUserPage(props) {
                         name="password"
                         id="password"
                         placeholder="password"
+                        className="form-control"
                     />
                 </div>
                 <div className="form-group">
                     <label htmlFor="confirmPassword">confirm password</label>
                     <input
+                        className="form-control"
                         name="confirmPassword"
                         id="confirmPassword"
                         placeholder="confirm-password"

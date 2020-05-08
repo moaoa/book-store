@@ -1,19 +1,17 @@
-if (process.env.NODE_ENV !== 'production') require('dotenv').config()
 const express = require('express')
 const app = express()
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+    // app.use(require('morgan')('tiny'))
+}
 const mongoose = require('mongoose')
 const port = process.env.PORT || 5000
 const Book = require('./models/Book')
 const User = require('./models/User')
-const ac = require('./configure/access')
-const jwt = require('jsonwebtoken')
-// const morgan = require('morgan')
 const passport = require('passport')
-const SECRET = process.env.SECRET
 const setUser = require('./middleware/setUser')
 const path = require('path')
 
-// app.use(morgan('tiny'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(passport.initialize())

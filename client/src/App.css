@@ -1,3 +1,7 @@
 .bookComponent {
     width: 18rem;
 }
+
+.btn {
+    margin: 2px;
+}

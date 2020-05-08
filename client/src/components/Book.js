@@ -37,7 +37,7 @@ export default function Book(props) {
     }
 
     return book ? (
-        <div className="bookComponent card ">
+        <div className="bookComponent card my-4 ">
             <div className="card-body">
                 <div className="card-title">title: {props.book.title}</div>
                 <div className="card-subtitle ">

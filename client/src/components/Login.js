@@ -18,11 +18,21 @@ export default function Login() {
                 <h2>Login</h2>
                 <div className="form-group">
                     <label htmlFor="email">email</label>
-                    <input name="email" type="email" required />
+                    <input
+                        className="form-control"
+                        name="email"
+                        type="email"
+                        required
+                    />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">password</label>
-                    <input name="password" type="password" required />
+                    <input
+                        className="form-control"
+                        name="password"
+                        type="password"
+                        required
+                    />
                 </div>
 
                 <div className="form-group">
