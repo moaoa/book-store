@@ -30,6 +30,7 @@ export default function CreateNewUserPage(props) {
                 <div className="form-group">
                     <label htmlFor="password">password</label>
                     <input
+                        type="password"
                         name="password"
                         id="password"
                         placeholder="password"
@@ -39,6 +40,7 @@ export default function CreateNewUserPage(props) {
                 <div className="form-group">
                     <label htmlFor="confirmPassword">confirm password</label>
                     <input
+                        type="password"
                         className="form-control"
                         name="confirmPassword"
                         id="confirmPassword"
