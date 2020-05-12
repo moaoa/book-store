@@ -11,10 +11,12 @@ const User = require('./models/User')
 const passport = require('passport')
 const setUser = require('./middleware/setUser')
 const path = require('path')
+const cors = require('cors')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(passport.initialize())
+app.use(cors())
 
 // routes
 const booksRoute = require('./routes/books')
@@ -47,8 +49,19 @@ app.use('/auth', authRoute)
 app.use('/books', setUser, booksRoute)
 app.use('/users', usersRoute)
 
+// in development
+if (process.env.NODE_ENV !== 'production') {
+    app.use('/files', express.static(__dirname + '/uploads'))
+    app.use('/', express.static(__dirname + '/client/build'))
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+}
+
+// in production
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'))
+    app.use('/files', express.static(__dirname + '/uploads'))
 
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))

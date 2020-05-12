@@ -1,7 +1,14 @@
 .bookComponent {
-    width: 18rem;
+    width: 25rem;
 }
-
 .btn {
     margin: 2px;
+}
+
+.backup-img {
+    text-align: center;
+    padding-top: 20%;
+    height: 10rem;
+    background-color: rgb(102, 101, 101);
+    color: white;
 }

@@ -3,11 +3,22 @@ const router = express.Router()
 const Book = require('../models/Book')
 const passport = require('passport')
 const access = require('../configure/access')
+const multer = require('multer')
+const path = require('path')
+const fs = require('fs')
 
-router.post('/', passport.authenticate('jwt'), async (req, res) => {
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, '../', 'uploads'))
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname.split(' ').join('-'))
+    },
+})
+
+const upload = multer({ storage }).single('file')
+router.post('/', passport.authenticate('jwt'), upload, async (req, res) => {
     const { title, pageCount, publishedAt, price } = req.body
-
-    console.log(req.user)
 
     const newBook = new Book({
         title,
@@ -15,10 +26,11 @@ router.post('/', passport.authenticate('jwt'), async (req, res) => {
         price,
         publishedAt: new Date(publishedAt),
         user: req.user.id,
+        imgName: req.file.filename,
     })
     try {
         await newBook.save()
-        res.json({ book: newBook })
+        res.json({ book: newBook, path: req.imgPath })
     } catch (error) {
         res.status(500).json({ msg: 'internal server error' })
         console.log(error)
@@ -57,8 +69,6 @@ router.delete(
     async (req, res) => {
         let book
         try {
-            console.log('slug from delete route: ', req.params.slug)
-
             book = await Book.findOne({ slug: req.params.slug })
             let granted = req.user.role == 'admin' || req.user.id == book.user
 

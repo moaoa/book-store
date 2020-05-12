@@ -1,42 +1,44 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { Context } from '../stateProvider'
 import { ADD_BOOK, FETCH_FAILED } from '../actions/constants'
+import axios from 'axios'
 export default function CreateNewBookPage(props) {
+    const [imgFile, setImgFile] = useState(null)
     let titleInput, countInput, dateInput, priceInput
     const { dispatch } = useContext(Context)
+    const fileOnChangeHandler = (e) => {
+        console.log(e.target.files[0])
+        setImgFile(e.target.files[0])
+    }
 
-    const handleSubmit = useCallback(
-        (e) => {
-            e.preventDefault()
-            fetch('/books', {
-                method: 'POST',
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const data = new FormData()
+        data.append('file', imgFile)
+        data.append('title', titleInput.value)
+        data.append('pageCount', countInput.value)
+        data.append('publishedAt', countInput.value)
+        data.append('price', countInput.value)
+        axios
+            .post('/books', data, {
+                responseType: 'json',
                 headers: {
-                    'Content-type': 'application/json',
-                    accept: 'application/json',
                     auth: localStorage.token,
+                    'Content-Type': 'multipart/form-data',
                 },
-                body: JSON.stringify({
-                    title: titleInput.value,
-                    pageCount: countInput.value,
-                    publishedAt: dateInput.value,
-                    price: priceInput.value,
-                }),
             })
-                .then((res) => res.json())
-                .then((data) => {
-                    dispatch({ type: ADD_BOOK, payload: data.book })
-                    props.history.push(`/show-book/${data.book.slug}`)
-                })
-                .catch((err) => {
-                    console.log(err)
-                    dispatch({ type: FETCH_FAILED, payload: err.msg })
-                })
-        },
-        titleInput,
-        countInput,
-        dateInput,
-        priceInput
-    )
+            .then((res) => {
+                console.log(res)
+                localStorage.setItem('passed', 'done')
+                if (res.status == 200) {
+                    dispatch({ type: ADD_BOOK, payload: res.data.book })
+
+                    props.history.push(`/show-book/${res.data.book.slug}`)
+                } else console.log(res.statusText)
+            })
+            .catch((e) => console.log(e))
+        e.preventDefault()
+    }
     return (
         <div>
             create book
@@ -48,6 +50,15 @@ export default function CreateNewBookPage(props) {
                         type="text"
                         name="title"
                         className="form-control"
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Img</label>
+                    <input
+                        type="file"
+                        name="file"
+                        className="form-control"
+                        onChange={fileOnChangeHandler}
                     />
                 </div>
                 <div className="form-group">

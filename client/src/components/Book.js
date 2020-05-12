@@ -3,6 +3,7 @@ import { Link, useHistory, useParams } from 'react-router-dom'
 import { useContext } from 'react'
 import { Context } from '../stateProvider'
 import { DELETE_BOOK, FETCH_FAILED } from '../actions/constants'
+import Axios from 'axios'
 
 export default function Book(props) {
     const history = useHistory()
@@ -23,8 +24,6 @@ export default function Book(props) {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data.success)
-
                 if (data.success) {
                     removeBook(book.slug)
                     history.push('/')
@@ -39,6 +38,15 @@ export default function Book(props) {
     return book ? (
         <div className="bookComponent card my-4 ">
             <div className="card-body">
+                {book.imgName ? (
+                    <img
+                        className="img-fluid"
+                        src={`/files/${book.imgName}`}
+                        alt="book image"
+                    />
+                ) : (
+                    <div className="backup-img">no img</div>
+                )}
                 <div className="card-title">title: {props.book.title}</div>
                 <div className="card-subtitle ">
                     publidhedAt: {props.book.publishedAt.split('T')[0]}

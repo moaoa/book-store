@@ -47,7 +47,12 @@ function App() {
                             },
                         } = props
                         const book = books.find((book) => book.slug === slug)
-                        return <Book book={book} />
+                        return (
+                            <Book
+                                book={book}
+                                auth={currentUser?._id == book?.user}
+                            />
+                        )
                     }}
                 />
                 <Route

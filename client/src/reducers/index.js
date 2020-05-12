@@ -9,6 +9,9 @@ import {
     GET_USERS,
 } from '../actions/constants'
 const reducer = (state, action) => {
+    localStorage.setItem('lastAction', action.type)
+    console.log(action.type)
+
     switch (action.type) {
         case FETCH_SUCCESS:
             return {
