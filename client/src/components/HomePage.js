@@ -7,7 +7,7 @@ export default function HomePage() {
         return <div>loading</div>
     }
     return (
-        <div>
+        <div className="row justify-content-between">
             {books.map((book) => (
                 <Book
                     key={book.slug}

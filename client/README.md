@@ -84,9 +84,15 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 [x] complete backend
 [x] when creating a new book the show page doesn't load
 [x] when deleting a book the home page doesn't re-render
-[] understand routing
-[] complete routing
-[] add auth
-[] permesion implementation
+[x] understand routing
+[x] complete routing
+[x] add auth
+[x] permesion implementation
+[x] upload functionalty
+[x] progress bar
+[x] delete img when the book is deleted
+[] make the books in a grid
+[] img alternative
+[] register / login with facebook
 [] setup payment
-[] stylig
+[x] stylig

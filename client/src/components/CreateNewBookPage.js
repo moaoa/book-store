@@ -4,10 +4,10 @@ import { ADD_BOOK, FETCH_FAILED } from '../actions/constants'
 import axios from 'axios'
 export default function CreateNewBookPage(props) {
     const [imgFile, setImgFile] = useState(null)
+    const [presentage, setPersentage] = useState(0)
     let titleInput, countInput, dateInput, priceInput
     const { dispatch } = useContext(Context)
     const fileOnChangeHandler = (e) => {
-        console.log(e.target.files[0])
         setImgFile(e.target.files[0])
     }
 
@@ -21,6 +21,13 @@ export default function CreateNewBookPage(props) {
         data.append('price', countInput.value)
         axios
             .post('/books', data, {
+                onUploadProgress: (progressEvent) => {
+                    let presentage = Math.ceil(
+                        (progressEvent.loaded / progressEvent.total) * 100
+                    )
+                    setPersentage(presentage)
+                    console.log(presentage)
+                },
                 responseType: 'json',
                 headers: {
                     auth: localStorage.token,
@@ -28,8 +35,6 @@ export default function CreateNewBookPage(props) {
                 },
             })
             .then((res) => {
-                console.log(res)
-                localStorage.setItem('passed', 'done')
                 if (res.status == 200) {
                     dispatch({ type: ADD_BOOK, payload: res.data.book })
 
@@ -41,7 +46,7 @@ export default function CreateNewBookPage(props) {
     }
     return (
         <div>
-            create book
+            <h2 className="mt-4">Create New Books</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>title</label>
@@ -52,15 +57,31 @@ export default function CreateNewBookPage(props) {
                         className="form-control"
                     />
                 </div>
-                <div className="form-group">
-                    <label>Img</label>
-                    <input
-                        type="file"
-                        name="file"
-                        className="form-control"
-                        onChange={fileOnChangeHandler}
-                    />
+                <div className="input-group my-5">
+                    <div className="custom-file ">
+                        <input
+                            type="file"
+                            className="custom-file-input"
+                            id="inputGroupFile02"
+                            onChange={fileOnChangeHandler}
+                        />
+                        <label
+                            className="custom-file-label"
+                            htmlFor="inputGroupFile020"
+                        >
+                            Choose file
+                        </label>
+                    </div>
+                    <div className="input-group-append">
+                        <span
+                            className="input-group-text"
+                            id="inputGroupFile02"
+                        >
+                            Upload
+                        </span>
+                    </div>
                 </div>
+
                 <div className="form-group">
                     <label>page count</label>
                     <input
@@ -88,6 +109,13 @@ export default function CreateNewBookPage(props) {
                         name="publishedAt"
                         className="form-control"
                     />
+                </div>
+                <div className="progress">
+                    <div
+                        className="progress-bar"
+                        role="progressbar"
+                        style={{ width: `${presentage}%` }}
+                    ></div>
                 </div>
                 <input className="btn btn-primary" type="submit" />
             </form>

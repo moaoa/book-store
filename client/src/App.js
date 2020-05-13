@@ -32,43 +32,49 @@ function App() {
             })
     }, [])
     return (
-        <div className="App container">
+        <>
             <Nav />
-            {currentUser && `hello ${currentUser.name}`}
+            <div className="App container">
+                {currentUser && (
+                    <div className="badge badge-secondary">{`Hello ${currentUser.name}`}</div>
+                )}
 
-            <Switch>
-                <Route path="/" exact component={HomePage} />
-                <Route
-                    path="/show-book/:slug"
-                    render={(props) => {
-                        const {
-                            match: {
-                                params: { slug },
-                            },
-                        } = props
-                        const book = books.find((book) => book.slug === slug)
-                        return (
-                            <Book
-                                book={book}
-                                auth={currentUser?._id == book?.user}
-                            />
-                        )
-                    }}
-                />
-                <Route
-                    path="/new-book"
-                    render={(props) => <CreateNewBookPage {...props} />}
-                />
-                <Route
-                    path="/edit/:slug"
-                    render={(props) => <EditPage {...props} />}
-                />
-                <Route path="/login" component={Login} />
-                <Route path="/register" component={CreateNewUserPage} />
-                <Route path="/myAccount" component={Dashboard} />
-                <Route path="/allUsers" component={AllUsers} />
-            </Switch>
-        </div>
+                <Switch>
+                    <Route path="/" exact component={HomePage} />
+                    <Route
+                        path="/show-book/:slug"
+                        render={(props) => {
+                            const {
+                                match: {
+                                    params: { slug },
+                                },
+                            } = props
+                            const book = books.find(
+                                (book) => book.slug === slug
+                            )
+                            return (
+                                <Book
+                                    book={book}
+                                    auth={currentUser?._id == book?.user}
+                                />
+                            )
+                        }}
+                    />
+                    <Route
+                        path="/new-book"
+                        render={(props) => <CreateNewBookPage {...props} />}
+                    />
+                    <Route
+                        path="/edit/:slug"
+                        render={(props) => <EditPage {...props} />}
+                    />
+                    <Route path="/login" component={Login} />
+                    <Route path="/register" component={CreateNewUserPage} />
+                    <Route path="/myAccount" component={Dashboard} />
+                    <Route path="/allUsers" component={AllUsers} />
+                </Switch>
+            </div>
+        </>
     )
 }
 

@@ -1,5 +1,10 @@
 .bookComponent {
-    width: 25rem;
+    align-items: center;
+    width: 16rem;
+}
+.bookComponent img {
+    height: 14rem;
+    width: 14rem;
 }
 .btn {
     margin: 2px;
@@ -11,4 +16,7 @@
     height: 10rem;
     background-color: rgb(102, 101, 101);
     color: white;
+}
+body {
+    font-family: 'Raleway', sans-serif;
 }

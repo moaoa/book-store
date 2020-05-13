@@ -2,8 +2,7 @@ import React from 'react'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { useContext } from 'react'
 import { Context } from '../stateProvider'
-import { DELETE_BOOK, FETCH_FAILED } from '../actions/constants'
-import Axios from 'axios'
+import { FETCH_FAILED } from '../actions/constants'
 
 export default function Book(props) {
     const history = useHistory()
@@ -36,11 +35,11 @@ export default function Book(props) {
     }
 
     return book ? (
-        <div className="bookComponent card my-4 ">
+        <div className="bookComponent card my-4 col-md-3">
             <div className="card-body">
                 {book.imgName ? (
                     <img
-                        className="img-fluid"
+                        className="card-img-top"
                         src={`/files/${book.imgName}`}
                         alt="book image"
                     />
