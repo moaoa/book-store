@@ -71,12 +71,9 @@ router.delete(
         try {
             book = await Book.findOne({ slug: req.params.slug })
             let granted = req.user.role == 'admin' || req.user.id == book.user
-            let imgFilePath = path.join(
-                __dirname,
-                '../',
-                'uploads',
-                book.imgName
-            )
+            let imgFilePath = book.imgName
+                ? path.join(__dirname, '../', 'uploads', book.imgName)
+                : ''
 
             if (granted) {
                 if (fs.existsSync(imgFilePath)) fs.unlinkSync(imgFilePath)

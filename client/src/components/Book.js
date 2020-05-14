@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { useContext } from 'react'
 import { Context } from '../stateProvider'
@@ -7,12 +7,18 @@ import { FETCH_FAILED } from '../actions/constants'
 export default function Book(props) {
     const history = useHistory()
     const params = useParams()
+    const [imgExists, setImgExists] = useState(true)
 
     const { removeBook, books, dispatch } = useContext(Context)
 
     let slug = props?.book?.slug || params.slug
 
     const book = books.find((book) => book.slug === slug)
+    const image = new Image()
+    image.src = `/files/${book.imgName}`
+    image.onerror = () => {
+        setImgExists(false)
+    }
 
     const sendDeleteReq = () => {
         fetch(`/books/${book.slug}`, {
@@ -37,7 +43,7 @@ export default function Book(props) {
     return book ? (
         <div className="bookComponent card my-4 col-md-3">
             <div className="card-body">
-                {book.imgName ? (
+                {imgExists ? (
                     <img
                         className="card-img-top"
                         src={`/files/${book.imgName}`}

@@ -2,7 +2,8 @@
     align-items: center;
     width: 16rem;
 }
-.bookComponent img {
+.bookComponent img,
+.backup-img {
     height: 14rem;
     width: 14rem;
 }
@@ -12,8 +13,7 @@
 
 .backup-img {
     text-align: center;
-    padding-top: 20%;
-    height: 10rem;
+    padding-top: 45%;
     background-color: rgb(102, 101, 101);
     color: white;
 }

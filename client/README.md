@@ -91,8 +91,8 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 [x] upload functionalty
 [x] progress bar
 [x] delete img when the book is deleted
-[] make the books in a grid
-[] img alternative
-[] register / login with facebook
-[] setup payment
 [x] stylig
+[x] make the books in a grid
+[] img alternative
+[] sign up / login with facebook
+[] setup payment
