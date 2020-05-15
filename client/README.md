@@ -93,6 +93,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 [x] delete img when the book is deleted
 [x] stylig
 [x] make the books in a grid
-[] img alternative
+[] img alternative (search for the onloadeddata method)
+[] lazy loading
 [] sign up / login with facebook
 [] setup payment

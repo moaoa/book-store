@@ -7,7 +7,7 @@ import { FETCH_FAILED } from '../actions/constants'
 export default function Book(props) {
     const history = useHistory()
     const params = useParams()
-    const [imgExists, setImgExists] = useState(true)
+    const [imgExists, setImgExists] = useState(false)
 
     const { removeBook, books, dispatch } = useContext(Context)
 
@@ -16,8 +16,8 @@ export default function Book(props) {
     const book = books.find((book) => book.slug === slug)
     const image = new Image()
     image.src = `/files/${book.imgName}`
-    image.onerror = () => {
-        setImgExists(false)
+    image.onloadeddata = () => {
+        setImgExists(true)
     }
 
     const sendDeleteReq = () => {
