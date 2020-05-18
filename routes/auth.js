@@ -1,12 +1,49 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+// @ts-check
 const Router = require('express').Router()
 const generateToken = require('../configure/generateToken')
 const User = require('../models/User')
+const FacebookUser = require('../models/FacebookUser')
 const passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     jwtStrategy = require('passport-jwt').Strategy,
-    ExtractJwt = require('passport-jwt').ExtractJwt
+    ExtractJwt = require('passport-jwt').ExtractJwt,
+    FacebookStrategy = require('passport-facebook').Strategy
+const { FACEBOOK_APP_ID, FACEBOOK_APP_SECRET } = process.env
+
+// passport.use(
+//     new FacebookStrategy(
+//         {
+//             clientID: FACEBOOK_APP_ID,
+//             clientSecret: FACEBOOK_APP_SECRET,
+//             callbackURL: 'http://localhost:5000/auth/facebook/callback',
+//             profileFields: ['id', 'displayName', 'emails'],
+//         },
+//         async function (accessToken, refreshToken, profile, cb) {
+//             console.log('facebook token : ' + accessToken)
+
+//             try {
+//                 const user = await FacebookUser.findOne({ id: profile.id })
+//                 if (user == null) {
+//                     const newUser = new FacebookUser({
+//                         id: profile.id,
+//                         email: profile.emails[0].value,
+//                         name: profile.displayName,
+//                     })
+//                     await newUser.save()
+//                     return cb(null, user)
+//                 }
+//                 return cb(null, {
+//                     name: user.name,
+//                     email: user.email,
+//                     id: user.id,
+//                 })
+//             } catch (error) {
+//                 cb(error)
+//                 console.log(error)
+//             }
+//         }
+//     )
+// )
 
 passport.use(
     new LocalStrategy(
@@ -31,6 +68,43 @@ passport.use(
     )
 )
 
+// // facebook routes
+// Router.get(
+//     '/facebook',
+//     passport.authenticate('facebook', {
+//         scope: ['email'],
+//     })
+// )
+
+// Router.get(
+//     '/facebook/callback',
+//     passport.authenticate('facebook', {
+//         failureRedirect: '/login',
+//     }),
+//     function (req, res) {
+//         // Successful authentication, redirect home.
+//         res.json({ user: req.user })
+//         res.redirect('/')
+//     }
+// )
+
+// Router.post('/facebook', async (req, res) => {
+//     const { email, userId, name } = req.body
+//     if (!email || !userId || !name)
+//         return res.status(400).json({ msg: 'you need to send all fields' })
+//     try {
+//         let user = await FacebookUser.findOne({ email, _id: userId })
+//         if (user == null) {
+//             user = new FacebookUser({ email, _id: userId, name })
+//             await user.save()
+//         }
+
+//         const token = generateToken({ id: userId })
+//         res.json(returnUserInfo(user, token))
+//     } catch (error) {
+//         console.log(error)
+//     }
+// })
 const opt = {}
 opt.jwtFromRequest = ExtractJwt.fromHeader('auth')
 
@@ -71,16 +145,19 @@ Router.post('/login', function (req, res, next) {
                     .json({ msg: 'some thing went wrong', err })
             const token = generateToken({ id: user.id })
 
-            return res.json({
-                user: {
-                    name: user.name,
-                    email: user.email,
-                    role: user.role,
-                    _id: user._id,
-                    token,
-                },
-            })
+            return res.json(returnUserInfo(user, token))
         })
     })(req, res, next)
 })
+function returnUserInfo(user, token) {
+    return {
+        user: {
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            _id: user._id,
+            token,
+        },
+    }
+}
 module.exports = Router

@@ -7,6 +7,7 @@ import {
     LOGIN,
     GET_USERS,
 } from './actions/constants'
+import Axios from 'axios'
 const initialState = {
     books: [],
     error: '',
@@ -20,6 +21,16 @@ export default function StateProvider({ children }) {
     // const history = useHistory()
     const removeBook = (slug) => {
         dispatch({ type: DELETE_BOOK, payload: slug })
+    }
+    const addFacebookUser = (res) => {
+        Axios.post('/auth/facebook', { data: res }).then((res) => {
+            if (res.status == 200) {
+                dispatch({ type: LOGIN, payload: res.data.user })
+                localStorage.setItem('token', res.data.user.token)
+            } else {
+                dispatch({ type: FETCH_FAILED, payload: res.msg })
+            }
+        })
     }
     const registerUser = (e) => {
         e.preventDefault()
@@ -90,6 +101,7 @@ export default function StateProvider({ children }) {
                 logOutUser,
                 registerUser,
                 getUsers,
+                addFacebookUser,
             }}
         >
             {children}

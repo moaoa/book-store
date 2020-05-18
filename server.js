@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
-    // app.use(require('morgan')('tiny'))
+    app.use(require('morgan')('tiny'))
 }
 const mongoose = require('mongoose')
 const port = process.env.PORT || 5000

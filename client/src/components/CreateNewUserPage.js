@@ -1,14 +1,25 @@
 import React, { useContext } from 'react'
 import { Context } from '../stateProvider'
 import { useHistory } from 'react-router'
+import FacebookLogin from 'react-facebook-login'
 
 export default function CreateNewUserPage(props) {
-    const { registerUser, currentUser } = useContext(Context)
+    const { registerUser, currentUser, addFacebookUser } = useContext(Context)
+
+    const handleFacebookAuth = (res) => {
+        addFacebookUser(res)
+    }
     const history = useHistory()
     if (currentUser) history.push('/')
     return (
         <>
             <form onSubmit={registerUser}>
+                <FacebookLogin
+                    appId="1223606648030855"
+                    autoLoad={true}
+                    fields={'name, email'}
+                    callback={handleFacebookAuth}
+                />
                 <div className="form-group">
                     <label htmlFor="name">name</label>
                     <input
