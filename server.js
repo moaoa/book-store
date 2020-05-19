@@ -4,6 +4,12 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
     app.use(require('morgan')('tiny'))
 }
+const https = require('https')
+const fs = require('fs')
+const httpsOptions = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem'),
+}
 const mongoose = require('mongoose')
 const port = process.env.PORT || 5000
 const Book = require('./models/Book')
@@ -67,4 +73,7 @@ if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
     })
 }
-app.listen(port)
+
+https
+    .createServer(httpsOptions, app)
+    .listen(port, () => console.log('connected'))

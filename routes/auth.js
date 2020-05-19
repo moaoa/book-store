@@ -88,23 +88,24 @@ passport.use(
 //     }
 // )
 
-// Router.post('/facebook', async (req, res) => {
-//     const { email, userId, name } = req.body
-//     if (!email || !userId || !name)
-//         return res.status(400).json({ msg: 'you need to send all fields' })
-//     try {
-//         let user = await FacebookUser.findOne({ email, _id: userId })
-//         if (user == null) {
-//             user = new FacebookUser({ email, _id: userId, name })
-//             await user.save()
-//         }
+Router.post('/facebook', async (req, res) => {
+    const { email, userID, name } = req.body.data
 
-//         const token = generateToken({ id: userId })
-//         res.json(returnUserInfo(user, token))
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
+    if (!email || !userID || !name)
+        return res.status(400).json({ msg: 'you need to send all fields' })
+    try {
+        let user = await FacebookUser.findOne({ email, _id: userID })
+        if (user == null) {
+            user = new FacebookUser({ email, _id: userID, name })
+            await user.save()
+        }
+
+        const token = generateToken({ id: userID })
+        res.json(returnUserInfo(user, token))
+    } catch (error) {
+        console.log(error)
+    }
+})
 const opt = {}
 opt.jwtFromRequest = ExtractJwt.fromHeader('auth')
 

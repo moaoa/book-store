@@ -23,6 +23,8 @@ export default function StateProvider({ children }) {
         dispatch({ type: DELETE_BOOK, payload: slug })
     }
     const addFacebookUser = (res) => {
+        console.log(res)
+
         Axios.post('/auth/facebook', { data: res }).then((res) => {
             if (res.status == 200) {
                 dispatch({ type: LOGIN, payload: res.data.user })
