@@ -1,9 +1,12 @@
 import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Context } from '../stateProvider'
+import FacebookLogin from 'react-facebook-login'
 export default function Login() {
     const history = useHistory()
-    const { error, logInUser } = useContext(Context)
+    const { error, logInUser, addFacebookUser, currentUser } = useContext(
+        Context
+    )
     const handleSubmit = (e) => {
         e.preventDefault()
 
@@ -11,8 +14,21 @@ export default function Login() {
         history.push('/')
     }
 
+    const handleFacebookAuth = (res) => {
+        addFacebookUser(res)
+    }
+    if (currentUser) {
+        history.push('/')
+    }
+
     return (
         <>
+            <FacebookLogin
+                appId="1223606648030855"
+                autoLoad={true}
+                fields={'name, email'}
+                callback={handleFacebookAuth}
+            />
             <form onSubmit={handleSubmit}>
                 {error && <div className="error ">{JSON.stringify(error)}</div>}
                 <h2>Login</h2>

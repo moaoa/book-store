@@ -36,7 +36,8 @@
         "passport-jwt": "^4.0.0",
         "passport-local": "^1.0.0",
         "react-facebook-login": "^4.1.1",
-        "slug": "^2.1.1"
+        "slug": "^2.1.1",
+        "stripe": "^8.55.0"
     },
     "devDependencies": {
         "morgan": "^1.10.0",

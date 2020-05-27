@@ -3,12 +3,14 @@ import { Link, useHistory, useParams } from 'react-router-dom'
 import { useContext } from 'react'
 import { Context } from '../stateProvider'
 import { FETCH_FAILED } from '../actions/constants'
+import StripeCheckout from 'react-stripe-checkout'
+import Axios from 'axios'
+import { toast } from 'react-toastify'
 
 export default function Book(props) {
     const history = useHistory()
     const params = useParams()
     const [imgExists, setImgExists] = useState(false)
-
     const { removeBook, books, dispatch } = useContext(Context)
 
     let slug = props?.book?.slug || params.slug
@@ -20,6 +22,26 @@ export default function Book(props) {
         setImgExists(true)
     }
 
+    const handleStripeToken = async (token) => {
+        console.log(token)
+        const response = await Axios.post('/books/ckeckout', { token, book })
+        const { status, error } = response.data
+        console.log('res: ', response)
+
+        if (status == 'success') {
+            console.log(status)
+
+            toast('success chck  for details', {
+                type: 'success',
+            })
+        } else {
+            console.log('called')
+
+            toast('failed', {
+                type: 'error',
+            })
+        }
+    }
     const sendDeleteReq = () => {
         fetch(`/books/${book.slug}`, {
             method: 'DELETE',
@@ -76,6 +98,17 @@ export default function Book(props) {
                         >
                             Delete
                         </button>
+                    )}
+
+                    {!props.auth && (
+                        <StripeCheckout
+                            stripeKey={
+                                'pk_test_gyV4dJkq6dTNRWFIu0wS81o300iZXbLYju'
+                            }
+                            token={handleStripeToken}
+                            amount={book.price * 100}
+                            name={book.title}
+                        />
                     )}
                 </div>
             </div>

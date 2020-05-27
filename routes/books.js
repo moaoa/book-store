@@ -90,5 +90,45 @@ router.delete(
         }
     }
 )
+router.post('/ckeckout', async (req, res) => {
+    let status, error
+    try {
+        const { book, token } = req.body
 
+        const customer = await stripe.customers.create({
+            email: token.email,
+            source: token.id,
+        })
+
+        const idemotency_key = Date.now()
+        const sharge = await stripe.charges.create(
+            {
+                amount: book.price,
+                currency: 'usd',
+                customer: customer.id,
+                receipt_email: token.email,
+                description: `purchased the book with the title ${book.title}`,
+                shipping: {
+                    name: token.card.name,
+                    address: {
+                        line1: token.card.address_line1,
+                        line2: token.card.address_line2,
+                        city: token.card.address_city,
+                        country: token.card.address.country,
+                        postal_code: token.card.address_zip,
+                    },
+                },
+            },
+            {
+                idemotency_key,
+            }
+        )
+        console.log('charge: ', { charge })
+        status: 'success'
+    } catch (e) {
+        console.log(e)
+        status = 'failure'
+    }
+    res.json({ error, status })
+})
 module.exports = router

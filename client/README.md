@@ -93,6 +93,9 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 [x] delete img when the book is deleted
 [x] stylig
 [x] make the books in a grid
+[x] setup https server :)
+[x] check Oauth with react in npm
+[x] sign up with facebook
+[x] login with facebook
 [] lazy loading
-[] sign up / login with facebook
 [] setup payment
